@@ -4,6 +4,7 @@ import Product from '../components/Forms/products';
 import Tax from '../components/Forms/taxes';
 import {handleLongStatements,handleNote,formatter} from '../helpers/helpers';
 import INV1 from '../invoices/inv1';
+import uuid from 'react-uuid';
 
 function handleChange(e){
     var obj=e.target.name;
@@ -64,12 +65,14 @@ function handleProductChange(e){
     })
 }
 
-function handlePrint(){
+function handlePrint(addInvoice){
         
     var data=[];
+    var amount=0;
     this.state.wizardData.products.forEach((product)=>{
         var total=product.unitRate*product.hour*product.quantity;
         var item=[product.name,'Rs. '+product.unitRate,product.hour,product.quantity,total];
+        amount+=total;
         data.push(item);
     });
 
@@ -90,6 +93,9 @@ function handlePrint(){
         clientName:this.state.wizardData.billTo,clientAddress:this.state.wizardData.address,date:this.state.wizardData.date,
         products:data,
         note:note});
+        
+        addInvoice({Id:uuid(),clientName:this.state.wizardData.billTo,
+        clientPhone:this.state.wizardData.phone,clientEmail:this.state.wizardData.email,amount:parseInt(amount+tax+balance),date:this.state.wizardData.date,time:this.state.wizardData.time});
         this.setState({
             ...this.defaultState
         });

@@ -12,9 +12,8 @@ function hello(){
 
 async function hello1(){
     console.log("Before==============");
-    promise().then((fdsf)=>{
-        console.log(fdsf);
-    });
+    var res=await promise();
+    console.log(res);
     console.log("After===============")
 };
 

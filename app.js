@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MainApp from './components/main';
+import Store from './Redux/store';
+import {Provider} from 'react-redux';
 
 const App=()=>{
     return(
-        <MainApp />
+        <Provider store={Store}>
+            <MainApp />
+        </Provider>
     )
 }
 

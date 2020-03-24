@@ -5,6 +5,8 @@ import Validator from 'simple-react-validator';
 import {checkValidationForEachStep} from '../helpers/helpers';
 import ThankYou from './loading';
 import {handleChange,handleForm,handleDateChange,handleProductChange,addProduct,handlePrint} from '../helpers/wizardUtilities';
+import {addInvoice} from '../Redux/actions';
+import {connect} from 'react-redux';
 class GenerateInvoice extends Component{
     constructor(props){
         super(props);
@@ -32,6 +34,7 @@ class GenerateInvoice extends Component{
                 note:''
             }
         };
+        this.props=props;
         this.validator=new Validator();
         this.state=this.defaultState;
         this.handleForm=handleForm.bind(this);
@@ -95,7 +98,7 @@ class GenerateInvoice extends Component{
                                     {this.state.step!==3?<Button variant="dark" style={{float:'right'}} onClick={this.__next}>Next</Button>:
                                     <Button type="submit"
                                     onClick={()=>(
-                                        this.handlePrint()
+                                        this.handlePrint(this.props.addInvoice)
                                     )}
                                     >Create Invoice</Button>}
                                     
@@ -109,4 +112,15 @@ class GenerateInvoice extends Component{
     }
 }
 
-export default GenerateInvoice;
+const mapStateToprops=(state)=>{
+    return state
+};
+const mapDispatchToProps=(dispatch)=>{
+    return {
+        addInvoice:(info={})=>{
+            return dispatch(addInvoice(info));
+        }
+    }
+};
+
+export default connect(mapStateToprops,mapDispatchToProps)(GenerateInvoice);

@@ -2,6 +2,10 @@ import React from 'react';
 import {Col ,Card, Row} from 'react-bootstrap';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
+import {connect} from 'react-redux';
+import applyFilters from '../Redux/sortFilters';
+import { nameFilter, dateFilter, sortByFilter } from "../Redux/actions";
+
 const ListInvoices=(props)=>{
     return(
         <Col lg={{span:8, offset:2}}>
@@ -17,19 +21,32 @@ const ListInvoices=(props)=>{
                 <Row>
                 <Col lg={4}>
                     <div className="md-form" >
-                        <input type="text" id="search"  className="form-control" />
+                        <input type="text" id="search"  className="form-control" onChange={(e)=>{
+                            var name=e.target.value;
+                            props.dispatch(nameFilter(name));
+                        }} />
                         <label htmlFor="search">Search</label>
                     </div>
                 </Col>
                 <Col lg={4}>
                     <div className="md-form" style={{marginTop:'37px'}}>
-                        <DayPickerInput placeholder="Select Date"/>
+                        <DayPickerInput placeholder="Select Date" onDayChange={(date)=>{
+                            if(date!=undefined){
+                            var dateFormatted=`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+                            props.dispatch(dateFilter(dateFormatted));
+                            }else{
+                                props.dispatch(dateFilter(""))
+                            }
+                        }}/>
                     </div>
                 </Col>
                 <Col lg={4}>
                     <div className="md-form">
-                        <select className="form-control">
-                            <option defaultValue="amount">Amount</option>
+                        <select className="form-control" onChange={(e)=>{
+                            var sort=e.target.value;
+                            props.dispatch(sortByFilter(sort));
+                        }}>
+                            <option defaultValue="amount" value="amount">Amount</option>
                             <option value="date">Date</option>
                         </select>
                     </div>
@@ -39,6 +56,7 @@ const ListInvoices=(props)=>{
                 <Card.Body>
                     <Row>
                         <Col>
+                        {props.invoices.length?
                         <table className="table table-responsive-md table-responsive-sm table-hover" >
                             <thead className="thead-dark">
                                 <tr>
@@ -51,17 +69,24 @@ const ListInvoices=(props)=>{
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>43543dsf435rs45</td>
-                                    <td>Syed Aamir Ali</td>
-                                    <td>+92 304 5094429</td>
-                                    <td>alisyedamir2018@gmail.com</td>
-                                    <td className="text-light">
-                                        <strong className="badge badge-primary" style={{fontSize:15}}>Rs .{5550}</strong></td>
-                                    <td>30-12-2012::10:56:90</td>
-                                </tr>
+                                {applyFilters(props.invoices,props.filters).map((inv)=>{
+                                    return (
+                                        <tr key={inv.Id}>
+                                            <td>{inv.Id}</td>
+                                            <td>{inv.clientName}</td>
+                                            <td>{inv.clientPhone}</td>
+                                            <td>{inv.clientEmail}</td>
+                                            <td className="text-light">
+                                                <strong className="badge badge-primary" style={{fontSize:15}}>Rs .{inv.amount}</strong></td>
+                                            <td>{inv.date} {inv.time}</td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
-                        </table>
+                        </table>:
+                        <h2 className="text-dark">No Invoices Yet</h2>
+                        }
+                        
                         </Col>
                     </Row>
                 </Card.Body>
@@ -70,4 +95,8 @@ const ListInvoices=(props)=>{
     )
 }
 
-export default ListInvoices;
+const mapStateToProps=(state)=>{
+    return state
+};
+
+export default connect(mapStateToProps)(ListInvoices);
