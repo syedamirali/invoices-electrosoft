@@ -2,7 +2,7 @@ var PATH=require('path');
 
 module.exports={
     mode:'development',
-    entry:PATH.join(__dirname,'app.js'),
+    entry:PATH.join(__dirname,'./app.js'),
     output:{
         path:PATH.join(__dirname,"public"),
         filename:'bundle.js'

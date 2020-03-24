@@ -11,7 +11,7 @@ const NotFound=(props)=>{
             <Card style={{padding:'25px'}} className="special-color-dark text-warning">
                         <center>
                         <UseAnimations
-                        animationKey="activity"
+                        animationKey="alertTriangle"
                         className="text-center text-warning"
                         size={200}
                     />
