@@ -1,6 +1,6 @@
 var PATH=require("path");
 var express=require("express");
-const PORT=8000;
+const PORT=process.env.PORT||8000;
 
 var p=PATH.join(__dirname,"../public");
 var app=express();
