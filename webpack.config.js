@@ -1,5 +1,6 @@
 var PATH=require('path');
 
+
 module.exports={
     mode:'development',
     entry:PATH.join(__dirname,'./app.js'),
