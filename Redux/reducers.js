@@ -7,11 +7,14 @@ var filterState={
 const invoices=(state=[],action={})=>{
     switch(action.type){
         case "addInvoice":
-            return [...state,action.invoiceInfo]
+            return [...state,action.invoiceInfo];
+        case 'removeAll':
+            return state=[];
         default:
-            return state
+            return state;
     }
 };
+
 
 const filters=(state=filterState,action={})=>{
     switch(action.type){

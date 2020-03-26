@@ -18,4 +18,13 @@ const sortByFilter=(sortBy="")=>({
     sortBy:sortBy
 });
 
-export {addInvoice, nameFilter, dateFilter, sortByFilter}
+const removeAll=()=>({
+    type:'removeAll'
+});
+
+const getID=(id)=>({
+    type:"GET_ID",
+    id:id
+});
+
+export {addInvoice, nameFilter, dateFilter, sortByFilter, removeAll, getID}

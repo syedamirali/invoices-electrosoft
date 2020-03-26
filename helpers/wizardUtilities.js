@@ -3,8 +3,12 @@ import General from '../components/Forms/general';
 import Product from '../components/Forms/products';
 import Tax from '../components/Forms/taxes';
 import {handleLongStatements,handleNote,formatter} from '../helpers/helpers';
+import {getId} from '../helpers/firebase';
 import INV1 from '../invoices/inv1';
-import uuid from 'react-uuid';
+import firebase from '../firebase/connection';
+
+
+
 
 function handleChange(e){
     var obj=e.target.name;
@@ -65,7 +69,7 @@ function handleProductChange(e){
     })
 }
 
-function handlePrint(addInvoice){
+function handlePrint(addInvoiceToFirebase){
         
     var data=[];
     var amount=0;
@@ -89,13 +93,15 @@ function handlePrint(addInvoice){
         var note=this.state.wizardData.note==''?"There is no note. ":this.state.wizardData.note;
         var balance=this.state.wizardData.balance==''?0:parseInt(this.state.wizardData.balance);
         var tax=this.state.wizardData.taxRate==''?0:parseInt(this.state.wizardData.taxRate);
-        INV1({handleLongStatements:handleLongStatements,handleNote:handleNote,formatter:formatter,products:data,balance:balance,tax:tax,
+        addInvoiceToFirebase({clientName:this.state.wizardData.billTo,
+            clientPhone:this.state.wizardData.phone,clientEmail:this.state.wizardData.email,amount:parseInt(amount+tax+balance),date:this.state.wizardData.date,time:this.state.wizardData.time});
+            
+        INV1({handleLongStatements:handleLongStatements,handleNote:handleNote,formatter:formatter,inv_no:getId(),products:data,balance:balance,tax:tax,
         clientName:this.state.wizardData.billTo,clientAddress:this.state.wizardData.address,date:this.state.wizardData.date,
         products:data,
         note:note});
         
-        addInvoice({Id:uuid(),clientName:this.state.wizardData.billTo,
-        clientPhone:this.state.wizardData.phone,clientEmail:this.state.wizardData.email,amount:parseInt(amount+tax+balance),date:this.state.wizardData.date,time:this.state.wizardData.time});
+        
         this.setState({
             ...this.defaultState
         });

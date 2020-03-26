@@ -5,7 +5,7 @@ import Validator from 'simple-react-validator';
 import {checkValidationForEachStep} from '../helpers/helpers';
 import ThankYou from './loading';
 import {handleChange,handleForm,handleDateChange,handleProductChange,addProduct,handlePrint} from '../helpers/wizardUtilities';
-import {addInvoice} from '../Redux/actions';
+import {addInvoiceToFirebase} from '../helpers/firebase';
 import {connect} from 'react-redux';
 class GenerateInvoice extends Component{
     constructor(props){
@@ -98,7 +98,7 @@ class GenerateInvoice extends Component{
                                     {this.state.step!==3?<Button variant="dark" style={{float:'right'}} onClick={this.__next}>Next</Button>:
                                     <Button type="submit"
                                     onClick={()=>(
-                                        this.handlePrint(this.props.addInvoice)
+                                        this.handlePrint(this.props.addInvoiceToFirebase)
                                     )}
                                     >Create Invoice</Button>}
                                     
@@ -115,12 +115,11 @@ class GenerateInvoice extends Component{
 const mapStateToprops=(state)=>{
     return state
 };
+
 const mapDispatchToProps=(dispatch)=>{
-    return {
-        addInvoice:(info={})=>{
-            return dispatch(addInvoice(info));
-        }
+    return{
+        addInvoiceToFirebase:(info)=>(dispatch(addInvoiceToFirebase(info)))
     }
-};
+}
 
 export default connect(mapStateToprops,mapDispatchToProps)(GenerateInvoice);

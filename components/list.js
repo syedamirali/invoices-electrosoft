@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {Col ,Card, Row} from 'react-bootstrap';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import {connect} from 'react-redux';
 import applyFilters from '../Redux/sortFilters';
 import { nameFilter, dateFilter, sortByFilter } from "../Redux/actions";
+import {addInvoicesToSate} from "../helpers/firebase";
 
-const ListInvoices=(props)=>{
+class ListInvoices extends Component{
+
+    constructor(props){
+        super(props);
+        this.props=props;
+        this.props.dispatch(addInvoicesToSate());
+    }
+
+
+
+    render(){
     return(
         <Col lg={{span:8, offset:2}}>
-            <Card>
+            <Card style={{marginBottom:'40px'}}>
                 <Card.Header>
                 
                 <Card.Title>
@@ -23,7 +34,7 @@ const ListInvoices=(props)=>{
                     <div className="md-form" >
                         <input type="text" id="search"  className="form-control" onChange={(e)=>{
                             var name=e.target.value;
-                            props.dispatch(nameFilter(name));
+                            this.props.dispatch(nameFilter(name));
                         }} />
                         <label htmlFor="search">Search</label>
                     </div>
@@ -33,9 +44,9 @@ const ListInvoices=(props)=>{
                         <DayPickerInput placeholder="Select Date" onDayChange={(date)=>{
                             if(date!=undefined){
                             var dateFormatted=`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-                            props.dispatch(dateFilter(dateFormatted));
+                            this.props.dispatch(dateFilter(dateFormatted));
                             }else{
-                                props.dispatch(dateFilter(""))
+                                this.props.dispatch(dateFilter(""))
                             }
                         }}/>
                     </div>
@@ -44,7 +55,7 @@ const ListInvoices=(props)=>{
                     <div className="md-form">
                         <select className="form-control" onChange={(e)=>{
                             var sort=e.target.value;
-                            props.dispatch(sortByFilter(sort));
+                            this.props.dispatch(sortByFilter(sort));
                         }}>
                             <option defaultValue="amount" value="amount">Amount</option>
                             <option value="date">Date</option>
@@ -56,7 +67,7 @@ const ListInvoices=(props)=>{
                 <Card.Body>
                     <Row>
                         <Col>
-                        {props.invoices.length?
+                        {this.props.invoices.length?
                         <table className="table table-responsive-md table-responsive-sm table-hover" >
                             <thead className="thead-dark">
                                 <tr>
@@ -69,7 +80,7 @@ const ListInvoices=(props)=>{
                                 </tr>
                             </thead>
                             <tbody>
-                                {applyFilters(props.invoices,props.filters).map((inv)=>{
+                                {applyFilters(this.props.invoices,this.props.filters).map((inv)=>{
                                     return (
                                         <tr key={inv.Id}>
                                             <td>{inv.Id}</td>
@@ -94,9 +105,11 @@ const ListInvoices=(props)=>{
         </Col>
     )
 }
+}
 
 const mapStateToProps=(state)=>{
     return state
 };
+
 
 export default connect(mapStateToProps)(ListInvoices);
