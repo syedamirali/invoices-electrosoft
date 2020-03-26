@@ -6,22 +6,30 @@ import {connect} from 'react-redux';
 import applyFilters from '../Redux/sortFilters';
 import { nameFilter, dateFilter, sortByFilter } from "../Redux/actions";
 import {addInvoicesToSate} from "../helpers/firebase";
+import UseAnimation from 'react-useanimations';
 
 class ListInvoices extends Component{
 
     constructor(props){
         super(props);
         this.props=props;
-        this.props.dispatch(addInvoicesToSate());
+        this.state={loading:true};
+        
     }
 
-
+    componentDidMount(){
+        this.setState((prevState)=>(
+            {loading:false}
+        ));
+        
+        this.props.dispatch(addInvoicesToSate());
+    }
 
     render(){
     return(
         <Col lg={{span:8, offset:2}}>
             <Card style={{marginBottom:'40px'}}>
-                <Card.Header>
+                <Card.Header >
                 
                 <Card.Title>
                     <h2>Invoices</h2>
@@ -65,6 +73,22 @@ class ListInvoices extends Component{
                 </Row>
                 </Card.Header>
                 <Card.Body>
+                    {!this.props.loaded&&
+                      <Row>
+                        <Col>
+                        <center>
+                            <UseAnimation animationKey="loading"  
+                            size={50}
+                            style={{
+                                color:"#263238"
+                            }}/>
+                            Loading
+                        </center>
+                        </Col>
+                        
+                    </Row>
+                    }
+                    
                     <Row>
                         <Col>
                         {this.props.invoices.length?
@@ -95,6 +119,7 @@ class ListInvoices extends Component{
                                 })}
                             </tbody>
                         </table>:
+                        this.props.loaded&&
                         <h2 className="text-dark">No Invoices Yet</h2>
                         }
                         

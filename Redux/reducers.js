@@ -29,4 +29,15 @@ const filters=(state=filterState,action={})=>{
     }
 };
 
-export{invoices, filters}
+const isLoaded=(state=false,action)=>{
+    switch(action.type){
+        case "START":
+            return false;
+        case "END":
+            return true
+        default:
+            return state
+    }
+}
+
+export{invoices, filters, isLoaded}

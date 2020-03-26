@@ -22,9 +22,13 @@ const removeAll=()=>({
     type:'removeAll'
 });
 
-const getID=(id)=>({
-    type:"GET_ID",
-    id:id
+
+const starting=()=>({
+    type:"START"
 });
 
-export {addInvoice, nameFilter, dateFilter, sortByFilter, removeAll, getID}
+const ending=()=>({
+    type:"END"
+})
+
+export {addInvoice, nameFilter, dateFilter, sortByFilter, removeAll, starting, ending}

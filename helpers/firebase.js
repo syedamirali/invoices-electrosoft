@@ -1,14 +1,16 @@
 import firebase from '../firebase/connection';
-import {addInvoice, removeAll} from '../Redux/actions';
+import {addInvoice, removeAll, starting, ending} from '../Redux/actions';
 
 const addInvoicesToSate=()=>{
     return (dispatch)=>{
+        dispatch(starting());
         firebase.database().ref("invoices").once("value")
         .then((snapshot)=>{
             dispatch(removeAll());
             snapshot.forEach((item)=>{
                 dispatch(addInvoice({...item.val(),Id:item.key}));
-            })
+            });
+            dispatch(ending());
         }).catch((error)=>{
             console.log(error);
         })
