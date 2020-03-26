@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "serve": "webpack-dev-server",
-    "build:prod": "webpack -p"
+    "build:prod": "webpack -p",
+    "start":"yarn build:prod",
+    "heroku-postbuild":"node server/server.js"
   },
   "dependencies": {
     "@babel/core": "^7.8.7",
