@@ -27,7 +27,7 @@ class Main extends Component{
                                 <Nav />
                             </Col>
                         </Row>
-                        <Row style={{paddingTop:'20px'}}>
+                        <Row style={{paddingTop:'20px',paddingBottom:'50px'}}>
                             <Switch>
                                 <Route path="/" exact={true} component={Invoices} />
                                 <Route path="/create" exact={true} component={Create} />
@@ -35,7 +35,7 @@ class Main extends Component{
                             </Switch>
                         </Row>
                         <Row>
-                            <Col style={{padding:'0px',position:'fixed',bottom:0}}>
+                            <Col style={{padding:'0px',position:'fixed',bottom:'0px'}}>
                                 <Footer />
                             </Col>
                         </Row>
